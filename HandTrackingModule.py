@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import cv2
 import mediapipe as mp
 import time
@@ -40,23 +34,23 @@ class handDetector():
         if self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(myHand.landmark):
-                # print(id, lm)
-                h, w, c = img.shape
-                cx, cy = int(lm.x * w), int(lm.y * h)
-                xList.append(cx)
-                yList.append(cy)
-                # print(id, cx, cy)
-                self.lmList.append([id, cx, cy])
-                if draw:
-                    cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
-            xmin, xmax = min(xList), max(xList)
-            ymin, ymax = min(yList), max(yList)
-            bbox = xmin, ymin, xmax, ymax
-
+            # print(id, lm)
+            h, w, c = img.shape
+            cx, cy = int(lm.x * w), int(lm.y * h)
+            xList.append(cx)
+            yList.append(cy)
+            # print(id, cx, cy)
+            self.lmList.append([id, cx, cy])
             if draw:
-                cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20), (bbox[2] + 20, bbox[3] + 20), (0, 255, 0), 2)
+                cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+        xmin, xmax = min(xList), max(xList)
+        ymin, ymax = min(yList), max(yList)
+        bbox = xmin, ymin, xmax, ymax
+
+        if draw:
+            cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20), (bbox[2] + 20, bbox[3] + 20), (0, 255, 0), 2)
     
-            return self.lmList, bbox
+        return self.lmList, bbox
 
     def fingersUp(self):
         fingers = []
@@ -71,7 +65,7 @@ class handDetector():
                 fingers.append(1)
             else:
                 fingers.append(0)
-            return fingers
+           return fingers
 
     def findDistance(self, p1, p2, img, draw=True):
 
@@ -87,9 +81,9 @@ class handDetector():
             length = math.hypot(x2 - x1, y2 - y1)
             return length, img, [x1, y1, x2, y2, cx, cy]
 
-def main():
+    def main():
         pTime = 0
-        cap = cv2.VideoCapture(1)
+       cap = cv2.VideoCapture(1)
         detector = handDetector()
         while True:
             success, img = cap.read()
@@ -107,20 +101,6 @@ def main():
     
         cv2.imshow("Image", img)
         cv2.waitKey(1)
-main()
 
-
-# In[ ]:
-
-
-import cv2
-cap = cv2.VideoCapture(1)
-while True:
-            success, img = cap.read()
-
-
-# In[ ]:
-
-
-
-
+if __name__ == "__main__":
+    main()
